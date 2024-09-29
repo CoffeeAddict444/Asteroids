@@ -1,3 +1,4 @@
+from os import kill
 import pygame
 from constants import *
 from player import Player
@@ -27,16 +28,17 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        if player.timer > 0:
-            pass
-        else:
-            player.handle_input()
+        player.handle_input()
         for updatable_object in updatable:
             updatable_object.update(dt)
         for asteroid in asteroids:
             if asteroid.is_colliding(player):
                 print("Game over!")
                 exit()
+        for asteroid in asteroids:
+            for shot in shots:
+                if asteroid.is_colliding(shot):
+                    asteroid.split()
         screen.fill((0, 0, 0))
         for drawable_object in drawable:
             drawable_object.draw(screen)
