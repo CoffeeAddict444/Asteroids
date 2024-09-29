@@ -12,6 +12,8 @@ def main():
     print("Starting asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
+    pygame.font.init()
+    font = pygame.font.Font(None, 36)
     clock = pygame.time.Clock()
     dt = 0
     updatable = pygame.sprite.Group()
@@ -33,15 +35,17 @@ def main():
             updatable_object.update(dt)
         for asteroid in asteroids:
             if asteroid.is_colliding(player):
-                print("Game over!")
+                print(f"Game over! Your Score: {player.score}")
                 exit()
         for asteroid in asteroids:
             for shot in shots:
                 if asteroid.is_colliding(shot):
-                    asteroid.split()
+                    asteroid.split(player)
         screen.fill((0, 0, 0))
         for drawable_object in drawable:
             drawable_object.draw(screen)
+        score_text = font.render(f"Score: {player.score}", True, (255, 255, 255))
+        screen.blit(score_text, (10, 10))  # Position is (10, 10) for top-left corner
         pygame.display.flip()
         dt = clock.tick(60) / 1000
 
